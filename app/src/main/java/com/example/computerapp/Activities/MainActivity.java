@@ -2,7 +2,9 @@ package com.example.computerapp.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -41,12 +43,12 @@ public class MainActivity extends AppCompatActivity {
             textViewWelcome.setText(new StringBuilder().append("Welcome ").append(splittedName[0].substring(0, 1).
                     toUpperCase()).append(splittedName[0].substring(1).toLowerCase()).toString());
 
-            //getDesktops();
+            getDesktops();
         }
     }
 
     private void getDesktops(){
-        Call<List<Desktop>>  desktopCall = ApiClient.getDesktopService().getDesktops();
+        Call<List<Desktop>>  desktopCall = ApiClient.getDesktopService().getDesktops("Bearer "+ getToken());
         desktopCall.enqueue(new Callback<List<Desktop>>() {
             @Override
             public void onResponse(Call<List<Desktop>> call, Response<List<Desktop>> response) {
@@ -75,5 +77,10 @@ public class MainActivity extends AppCompatActivity {
 
     private void initMain(){
         textViewWelcome = findViewById(R.id.textViewWelcome);
+    }
+
+    private String getToken(){
+        SharedPreferences prefs=getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        return prefs.getString("token","");
     }
 }

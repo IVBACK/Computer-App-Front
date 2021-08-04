@@ -3,7 +3,9 @@ package com.example.computerapp.Activities;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.ProgressDialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -87,14 +89,14 @@ public class LoginActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                     UserLoginResponse userLoginResponse = response.body();
-                    Log.e("TAG", "ResponseBody: " + userLoginResponse);
+                    storeToken(response.body().token);
 
                     progressDialog.dismiss();
                     startActivity(new Intent(LoginActivity.this,MainActivity.class).putExtra("data",userLoginResponse));
                     finish();
 
                 }else{
-                    Log.d("here00, ", userLoginRequest.getEmail());
+
                     String message = null;
                     try {
                         message = response.errorBody().string();
@@ -115,6 +117,18 @@ public class LoginActivity extends AppCompatActivity {
                 progressDialog.dismiss();
             }
         });
+    }
+
+    private void storeToken(String token){
+        SharedPreferences prefs;
+        SharedPreferences.Editor edit;
+        prefs=getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        edit=prefs.edit();
+
+        String saveToken=token;
+        edit.putString("token",saveToken);
+        Log.i("Login",saveToken);
+        edit.commit();
     }
 
     private void setAndShowProgressDialog(){
