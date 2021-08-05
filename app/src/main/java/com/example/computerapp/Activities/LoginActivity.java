@@ -92,7 +92,7 @@ public class LoginActivity extends AppCompatActivity {
                     storeToken(response.body().token);
 
                     progressDialog.dismiss();
-                    startActivity(new Intent(LoginActivity.this,MainActivity.class).putExtra("data",userLoginResponse));
+                    startActivity(new Intent(LoginActivity.this,SearchActivity.class).putExtra("data",userLoginResponse));
                     finish();
 
                 }else{

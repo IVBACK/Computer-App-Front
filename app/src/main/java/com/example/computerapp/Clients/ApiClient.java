@@ -1,6 +1,7 @@
 package com.example.computerapp.Clients;
 
 import com.example.computerapp.Services.DesktopService;
+import com.example.computerapp.Services.NotebookService;
 import com.example.computerapp.Services.UserService;
 
 import java.security.cert.CertificateException;
@@ -39,6 +40,11 @@ public class ApiClient {
     public static DesktopService getDesktopService(){
         DesktopService desktopService = getRetrofit().create(DesktopService.class);
         return desktopService;
+    }
+
+    public static NotebookService getNotebookService(){
+        NotebookService notebookService = getRetrofit().create(NotebookService.class);
+        return notebookService;
     }
 
     public  static okhttp3.OkHttpClient getUnsafeOkHttpClient() {
