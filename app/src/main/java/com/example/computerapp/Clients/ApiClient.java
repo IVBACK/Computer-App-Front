@@ -24,7 +24,7 @@ public class ApiClient {
         OkHttpClient okHttpClient = getUnsafeOkHttpClient();
 
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("https://computerappservice.azurewebsites.net/api/")
+                .baseUrl("https://computerappapi20210805201237.azurewebsites.net/api/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .client(okHttpClient)
                 .build();

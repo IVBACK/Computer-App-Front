@@ -8,6 +8,9 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.provider.ContactsContract;
+import android.text.Editable;
+import android.text.TextUtils;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
@@ -34,6 +37,7 @@ public class SearchActivity extends AppCompatActivity {
     EditText searchField;
     RecyclerView resultList;
     NotebookAdaptor notebookAdaptor = new NotebookAdaptor();
+    List<Notebook> notebooks = new ArrayList<>();
 
 
     @Override
@@ -45,14 +49,31 @@ public class SearchActivity extends AppCompatActivity {
         resultList = findViewById(R.id.result_list);
         resultList.setHasFixedSize(true);
         resultList.setLayoutManager(new LinearLayoutManager(this));
-        
-        searchField.setOnClickListener(new View.OnClickListener() {
+
+        searchField.addTextChangedListener(new TextWatcher() {
             @Override
-            public void onClick(View view) {
-                notebookSearch();
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if(TextUtils.isEmpty(searchField.getText())){
+                    notebooks.clear();
+                    notebookAdaptor.notifyDataSetChanged();
+
+                    Toast.makeText(SearchActivity.this, "EMPTY", Toast.LENGTH_SHORT).show();
+
+                }else{
+                    notebookSearch();
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
             }
         });
-
     }
 
     private void notebookSearch() {
@@ -63,15 +84,13 @@ public class SearchActivity extends AppCompatActivity {
             public void onResponse(Call<List<Notebook>> call, Response<List<Notebook>> response) {
                 if (response.isSuccessful()){
 
-                    String message = "Response Successful";
-                    Toast.makeText(SearchActivity.this, message, Toast.LENGTH_LONG).show();
-
                    if (response.body() != null);{
-                        List<Notebook> notebooks = new ArrayList<>();
+                        notebooks.clear();
                         notebooks.addAll(response.body());
                         notebookAdaptor.setData(notebooks);
                         resultList.setAdapter(notebookAdaptor);
                    }
+
 
                 }else{
                     String message = "Response Is Not Successful";
