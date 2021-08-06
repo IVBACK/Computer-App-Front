@@ -16,6 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.computerapp.Clients.ApiClient;
+import com.example.computerapp.Models.User;
 import com.example.computerapp.R;
 import com.example.computerapp.Requests.UserLoginRequest;
 import com.example.computerapp.Responses.UserLoginResponse;
@@ -89,10 +90,10 @@ public class LoginActivity extends AppCompatActivity {
                 if(response.isSuccessful()){
 
                     UserLoginResponse userLoginResponse = response.body();
-                    storeToken(response.body().token);
+                    saveUser(userLoginResponse);
 
                     progressDialog.dismiss();
-                    startActivity(new Intent(LoginActivity.this,SearchActivity.class).putExtra("data",userLoginResponse));
+                    startActivity(new Intent(LoginActivity.this,SearchActivity.class));
                     finish();
 
                 }else{
@@ -119,16 +120,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
 
-    private void storeToken(String token){
-        SharedPreferences prefs;
-        SharedPreferences.Editor edit;
-        prefs=getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
-        edit=prefs.edit();
-
-        String saveToken=token;
-        edit.putString("token",saveToken);
-        Log.i("Login",saveToken);
-        edit.commit();
+    private void saveUser(UserLoginResponse user) {
+        SharedPreferences preferences = getApplicationContext().getSharedPreferences("loginPref", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("userName", user.name);
+        editor.putString("userMail", user.email);
+        editor.putString("token", user.token);
+        editor.apply();
     }
 
     private void setAndShowProgressDialog(){

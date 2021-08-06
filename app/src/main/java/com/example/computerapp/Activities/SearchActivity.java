@@ -53,16 +53,15 @@ public class SearchActivity extends AppCompatActivity {
         searchField.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
-
             }
 
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
                 if(TextUtils.isEmpty(searchField.getText())){
-                    notebooks.clear();
-                    notebookAdaptor.notifyDataSetChanged();
 
-                    Toast.makeText(SearchActivity.this, "EMPTY", Toast.LENGTH_SHORT).show();
+                    notebooks.clear();
+                    notebookAdaptor.setData(notebooks);
+                    notebookAdaptor.notifyDataSetChanged();
 
                 }else{
                     notebookSearch();
@@ -71,7 +70,6 @@ public class SearchActivity extends AppCompatActivity {
 
             @Override
             public void afterTextChanged(Editable editable) {
-
             }
         });
     }
@@ -108,7 +106,7 @@ public class SearchActivity extends AppCompatActivity {
     }
 
     private String getToken(){
-        SharedPreferences prefs=getSharedPreferences("myPrefs", Context.MODE_PRIVATE);
+        SharedPreferences prefs=getSharedPreferences("loginPref", Context.MODE_PRIVATE);
         return prefs.getString("token","");
     }
 }
